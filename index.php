@@ -1,5 +1,6 @@
 <a href="./static.php">static</a>
 <a href="./chaining.php">chaining</a>
+<a href="./base.php">base</a>
 <br>
 <?php
 
