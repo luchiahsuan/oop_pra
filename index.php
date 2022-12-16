@@ -13,20 +13,23 @@
 // echo "<pre>";
 // var_dump($cat);
 // echo "</pre>";
-$cat = new Animal('小花','黑白相間');
+$cat = new Cat('小花', '黑白相間');
+echo $cat->getType();
 echo $cat->getName();
 echo $cat->getColor();
-$dog = new Animal('小米','扎染黑色');
+echo "<br>";
+
+$dog = new Dog('小米', '扎染黑色');
+echo $dog->getType();
 echo $dog->getName();
 echo $dog->getColor();
-
-
+echo "<br>";
 
 
 
 
 $cat->run();
-$dog->speed();
+// $dog->speed();
 
 
 class Animal
@@ -35,12 +38,16 @@ class Animal
     public $name = 'John';
     public $hair_color = "brown";
 
-    public function __construct($name,$color)
+    public function __construct($type, $name, $color)
     {
+        $this->type = $type;
         $this->name = $name;
         $this->hair_color = $color;
     }
-
+    public function getType()
+    {
+        return $this->type;
+    }
     public function getName()
     {
         return $this->name;
@@ -52,12 +59,29 @@ class Animal
 
     public function run()
     {
-        echo "我會跑喔!";
+        // echo "我會跑喔!";
         // $this->speed();
         // echo$this->type;
     }
     private function speed()
     {
         echo "我會叫喔!";
+    }
+}
+
+class Cat extends Animal{
+    public function __construct($name,$color)
+    {
+        $this->type = '貓';
+        $this->name = $name;
+        $this->hair_color = $color;
+    }
+}
+class Dog extends Animal{
+    public function __construct($name,$color)
+    {
+        $this->type = '狗';
+        $this->name = $name;
+        $this->hair_color = $color;
     }
 }
