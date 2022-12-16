@@ -1,3 +1,6 @@
+<a href="./static.php">static</a>
+<a href="./chaining.php">chaining</a>
+<br>
 <?php
 
 
@@ -17,12 +20,14 @@ $cat = new Cat('小花', '黑白相間');
 echo $cat->getType();
 echo $cat->getName();
 echo $cat->getColor();
+echo $cat->hide();
 echo "<br>";
 
 $dog = new Dog('小米', '扎染黑色');
 echo $dog->getType();
 echo $dog->getName();
 echo $dog->getColor();
+echo $dog->eat();
 echo "<br>";
 
 
@@ -76,6 +81,9 @@ class Cat extends Animal{
         $this->name = $name;
         $this->hair_color = $color;
     }
+    public function hide(){
+        echo "很會躲";
+    }
 }
 class Dog extends Animal{
     public function __construct($name,$color)
@@ -83,5 +91,8 @@ class Dog extends Animal{
         $this->type = '狗';
         $this->name = $name;
         $this->hair_color = $color;
+    }
+    public function eat(){
+        echo "很會吃";
     }
 }
