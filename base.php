@@ -214,6 +214,23 @@ class DB
         return $this->pdo->query($sql)->fetchColumn();
     }
 
+    private function mathsql($math,$col,...$arg){
+        if(isset($arg[0])){
+            foreach($arg[0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select avg($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+        $sql="select avg($col) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+
+
+
 }
 
 function dd($array)
