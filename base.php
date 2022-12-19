@@ -1,39 +1,8 @@
 <?php
 
 $student = new DB('students');
-// $Dept=new DB('dept');
-// echo $Dept->find(2)->name;
 
-// var_dump($student);
-// $john=$student->find(30);
-// echo is_object($john);
-// echo"<pre>";
-// print_r($john);
-// echo"</pre>";
-// echo$john->name;
-
-// $student->del(486);
-// $student->save(['name'=>'鹿兒島','dept'=>'3']);
-// echo $student->count('id');
 $Score = new DB("student_scores");
-echo $Score->max('score');
-echo "<hr>";
-echo $Score->min('score');
-echo "<hr>";
-echo $Score->avg('score');
-echo "<hr>";
-
-// echo "<br>";
-// $stus = $student->all(['dept'=>3]);
-// echo "<br>";
-// foreach ($stus as $stu) {
-//     echo $stu['parents']."=>".$stu['dept'];
-//     echo "<br>";
-// }
-// var_dump($stus);
-echo $student->sum('graduate_at');
-echo "<hr>";
-echo $student->sum('graduate_at', ['dept' => '2']);
 class DB
 {
     protected $table;
@@ -125,16 +94,16 @@ class DB
             foreach ($array as $key => $value) {
                 $tmp[] = "`$key`='$value'";
             }
-            $sql = "updates $this->table set";
+            $sql = "update $this->table set";
             $sql .= join(",", $tmp);
             $sql .= "where `id`='{$array['id']}'";
         } else {
             $cols = array_keys($array);
             $sql = "insert into $this->table (`" . join("`,`", $cols) . "`)
                                        values('" . join("','", $array) . "')";
-            echo $sql;
-            //  return $this -> pdo->exec($sql);
         }
+        echo $sql;
+         return $this -> pdo->exec($sql);
     }
 
     function count($arg)
@@ -153,21 +122,21 @@ class DB
         // return $this->pdo->query($sql)->fetchColumn();
     }
 
-    function sum($col, ...$arg)
-    {
-        if (isset($arg[0])) {
-            foreach ($arg as $key => $value) {
-                $tmp[] = "`$key`='$value'";
-            }
-            $sql = "select sum($col) from $this->table where ";
-            $sql .= join(" && ", $tmp);
-        } else {
+    // function sum($col, ...$arg)
+    // {
+    //     if (isset($arg[0])) {
+    //         foreach ($arg as $key => $value) {
+    //             $tmp[] = "`$key`='$value'";
+    //         }
+    //         $sql = "select sum($col) from $this->table where ";
+    //         $sql .= join(" && ", $tmp);
+    //     } else {
 
-            $sql = "select sum($col) from $this->table";
-        }
-        echo $sql;
-        return $this->pdo->query($sql)->fetchColumn();
-    }
+    //         $sql = "select sum($col) from $this->table";
+    //     }
+    //     echo $sql;
+    //     return $this->pdo->query($sql)->fetchColumn();
+    // }
     function max($col, ...$arg)
     {
         if (isset($arg[0])) {
@@ -248,3 +217,16 @@ function dd($array)
     print_r($array);
     echo "</pre>";
 }
+
+function q($sql){
+    $dsn="mysql:host=localhost;charset=utf8;dbname=school";
+    $pdo=new PDO($dsn,'root','');
+    //echo $sql;
+    return $pdo->query($sql)->fetchAll();
+}
+
+//header函式
+function to($location){
+    header("location:$location");
+}
+
