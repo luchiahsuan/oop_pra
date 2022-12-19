@@ -4,7 +4,7 @@ $student = new DB('students');
 // $Dept=new DB('dept');
 // echo $Dept->find(2)->name;
 
-// // var_dump($student);
+// var_dump($student);
 // $john=$student->find(30);
 // echo is_object($john);
 // echo"<pre>";
@@ -14,6 +14,15 @@ $student = new DB('students');
 
 // $student->del(486);
 // $student->save(['name'=>'鹿兒島','dept'=>'3']);
+// echo $student->count('id');
+$Score=new DB("student_scores");
+echo $Score->max('score');
+echo "<hr>";
+echo $Score->min('score');
+echo "<hr>";
+echo $Score->avg('score');
+echo "<hr>";
+
 // echo "<br>";
 // $stus = $student->all(['dept'=>3]);
 // echo "<br>";
@@ -22,7 +31,9 @@ $student = new DB('students');
 //     echo "<br>";
 // }
 // var_dump($stus);
-
+echo $student->sum('graduate_at');
+echo "<hr>";
+echo $student->sum('graduate_at',['dept'=>'2']);
 class DB
 {
     protected $table;
@@ -125,6 +136,84 @@ class DB
             //  return $this -> pdo->exec($sql);
         }
     }
+
+    function count($arg){
+        if(is_array($arg)){
+            foreach ($arg as $key => $value) {
+                $tmp[] = "`$key`='$value'";
+            }
+            $sql="select count(*) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select count($arg) from $this->table";
+            
+        }
+        echo $sql;
+            // return $this->pdo->query($sql)->fetchColumn();
+    }
+
+    function sum($col,...$arg){
+        if(isset($arg[0])){
+            foreach ($arg as $key => $value) {
+                $tmp[] = "`$key`='$value'";
+            }
+            $sql="select sum($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select sum($col) from $this->table";
+            
+        }
+        echo $sql;
+            return $this->pdo->query($sql)->fetchColumn();
+    }
+    function max($col,...$arg){
+        if(isset($arg[0])){
+            foreach($arg[0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select max($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select max($col) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+    function min($col,...$arg){
+        if(isset($arg[0])){
+            foreach($arg[0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select min($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select min($col) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+    function avg($col,...$arg){
+        if(isset($arg[0])){
+            foreach($arg[0] as $key => $value){
+                $tmp[]="`$key`='$value'";
+            }
+            $sql="select avg($col) from $this->table where ";
+            $sql.=join(" && ",$tmp);
+        }else{
+
+            $sql="select avg($col) from $this->table";
+        }
+
+        echo $sql;
+        return $this->pdo->query($sql)->fetchColumn();
+    }
+
 }
 
 function dd($array)
