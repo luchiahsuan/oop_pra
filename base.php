@@ -1,24 +1,26 @@
 <?php
 
 $student = new DB('students');
-$Dept=new DB('dept');
-echo $Dept->find(2)->name;
+// $Dept=new DB('dept');
+// echo $Dept->find(2)->name;
 
-// var_dump($student);
-$john=$student->find(30);
-echo is_object($john);
-echo"<pre>";
-print_r($john);
-echo"</pre>";
-echo$john->name;
+// // var_dump($student);
+// $john=$student->find(30);
+// echo is_object($john);
+// echo"<pre>";
+// print_r($john);
+// echo"</pre>";
+// echo$john->name;
 
-echo "<br>";
-$stus = $student->all(['dept'=>3]);
-echo "<br>";
-foreach ($stus as $stu) {
-    echo $stu['parents']."=>".$stu['dept'];
-    echo "<br>";
-}
+// $student->del();
+
+// echo "<br>";
+// $stus = $student->all(['dept'=>3]);
+// echo "<br>";
+// foreach ($stus as $stu) {
+//     echo $stu['parents']."=>".$stu['dept'];
+//     echo "<br>";
+// }
 // var_dump($stus);
 
 class DB
@@ -64,26 +66,54 @@ class DB
     }
 
 
-function find($id){
-    $sql="select * from `$this->table` ";
+    function find($id)
+    {
+        $sql = "select * from `$this->table` ";
 
-    if(is_array($id)){
-        foreach($id as $key => $value){
-            $tmp[]="`$key`='$value'";
+        if (is_array($id)) {
+            foreach ($id as $key => $value) {
+                $tmp[] = "`$key`='$value'";
+            }
+
+            $sql = $sql . " where " . join(" && ", $tmp);
+        } else {
+
+            $sql = $sql . " where `id`='$id'";
         }
-
-        $sql = $sql . " where " . join(" && ",$tmp);
-
-    }else{
-
-        $sql=$sql . " where `id`='$id'";
+        //echo $sql;
+        $row = $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
+        $data = new stdClass;
+        foreach ($row as $col => $value) {
+            $data->{$col} = $value;
+        }
+        return $data;
     }
-    //echo $sql;
-    $row = $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
-    $data = new stdClass;
-    foreach ($row as $col => $value) {
-        $data->{$col} = $value;
+
+    function del($id)
+    {
+        $sql = "delete from `$this->table` ";
+
+        if (is_array($id)) {
+            foreach ($id as $key => $value) {
+                $tmp[] = "`$key`='$value'";
+            }
+
+            $sql = $sql . " where " . join(" && ", $tmp);
+        } else {
+
+            $sql = $sql . " where `id`='$id'";
+        }
+        echo $sql;
+        // return $this->pdo->exec($sql);
+
     }
-    return $data;
 }
+
+function dd($array)
+{
+    echo "<pre>";
+    print_r($array);
+    echo "</pre>";
 }
+
+?>
