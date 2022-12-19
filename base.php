@@ -12,8 +12,8 @@ $student = new DB('students');
 // echo"</pre>";
 // echo$john->name;
 
-// $student->del();
-
+// $student->del(486);
+// $student->save(['name'=>'鹿兒島','dept'=>'3']);
 // echo "<br>";
 // $stus = $student->all(['dept'=>3]);
 // echo "<br>";
@@ -104,8 +104,26 @@ class DB
             $sql = $sql . " where `id`='$id'";
         }
         echo $sql;
-        // return $this->pdo->exec($sql);
+        return $this->pdo->exec($sql);
 
+    }
+
+    function save($array)
+    {
+        if (isset($array['id'])) {
+            foreach ($array as $key => $value) {
+                $tmp[] = "`$key`='$value'";
+            }
+            $sql = "updates $this->table set";
+            $sql .= join(",", $tmp);
+            $sql .= "where `id`='{$array['id']}'";
+        } else {
+            $cols = array_keys($array);
+            $sql = "insert into $this->table (`" . join("`,`", $cols) . "`)
+                                       values('" . join("','", $array) . "')";
+                                       echo $sql;
+            //  return $this -> pdo->exec($sql);
+        }
     }
 }
 
@@ -115,5 +133,3 @@ function dd($array)
     print_r($array);
     echo "</pre>";
 }
-
-?>
